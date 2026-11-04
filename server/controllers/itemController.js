@@ -35,7 +35,13 @@ exports.createLostItem = async (req, res) => {
     // Process uploaded images
     let images = [];
     if (req.files && req.files.length > 0) {
-      images = req.files.map((file) => file.path || `/uploads/${file.filename}`);
+      images = req.files.map((file) => {
+        // If Cloudinary URL, use as is. If local disk, store relative web path '/uploads/filename'
+        if (file.path && (file.path.startsWith('http://') || file.path.startsWith('https://'))) {
+          return file.path;
+        }
+        return `/uploads/${file.filename}`;
+      });
     } else if (req.body.imageUrl) {
       images = [req.body.imageUrl];
     }
@@ -182,7 +188,12 @@ exports.createFoundItem = async (req, res) => {
 
     let images = [];
     if (req.files && req.files.length > 0) {
-      images = req.files.map((file) => file.path || `/uploads/${file.filename}`);
+      images = req.files.map((file) => {
+        if (file.path && (file.path.startsWith('http://') || file.path.startsWith('https://'))) {
+          return file.path;
+        }
+        return `/uploads/${file.filename}`;
+      });
     } else if (req.body.imageUrl) {
       images = [req.body.imageUrl];
     }
