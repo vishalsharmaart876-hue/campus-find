@@ -1,8 +1,9 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const readline = require('readline');
 const mongoose = require('mongoose');
-const { connectDB } = require('./config/db');
-const User = require('./models/User');
+const { connectDB } = require('../config/db');
+const User = require('../models/User');
 
 const rl = readline.createInterface({
   input: process.stdin,
