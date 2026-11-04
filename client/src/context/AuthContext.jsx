@@ -104,24 +104,6 @@ export const AuthProvider = ({ children }) => {
     return res.data;
   };
 
-  const demoLogin = async (role = 'student', rememberMe = true) => {
-    let email = 'aravind@poornima.edu.in';
-    let password = 'Student@123';
-
-    if (role === 'admin') {
-      email = 'admin@poornima.edu.in';
-      password = 'Admin@123';
-    } else if (role === 'faculty') {
-      email = 'prof.sharma@poornima.edu.in';
-      password = 'Faculty@123';
-    } else if (role === 'student2') {
-      email = 'priya@poornima.edu.in';
-      password = 'Student@123';
-    }
-
-    return await login(email, password, rememberMe);
-  };
-
   const logout = async () => {
     try {
       await api.post('/auth/logout');
@@ -192,7 +174,6 @@ export const AuthProvider = ({ children }) => {
         isStudent: user?.role === 'student',
         login,
         signup,
-        demoLogin,
         logout,
         updateProfile,
         changePassword,

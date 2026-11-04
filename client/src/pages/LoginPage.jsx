@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 
 const LoginPage = () => {
-  const { login, demoLogin } = useAuth();
+  const { login } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
@@ -45,20 +45,6 @@ const LoginPage = () => {
     }
   };
 
-  const handleDemo = async (role) => {
-    setLoading(true);
-    setError('');
-    try {
-      await demoLogin(role, rememberMe);
-      navigate(from, { replace: true });
-    } catch (err) {
-      setError('Demo login failed. Please ensure backend is running.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-8 space-y-6">
@@ -71,53 +57,8 @@ const LoginPage = () => {
             Welcome to CampusFind
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Log in with your college credentials to report and claim belongings.
+            Log in with your official Poornima credentials to report and claim belongings.
           </p>
-        </div>
-
-        {/* 1-Click Demo Logins for Fast Review */}
-        <div className="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700/60 space-y-2">
-          <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider block text-center">
-            ⚡ Quick 1-Click Demo Accounts
-          </span>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => handleDemo('student')}
-              className="py-1.5 px-2.5 text-xs font-semibold rounded-xl bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-600 hover:border-indigo-400 transition-colors flex items-center justify-center gap-1.5 shadow-sm"
-            >
-              <GraduationCap className="w-3.5 h-3.5 text-indigo-500" />
-              Student 1
-            </button>
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => handleDemo('student2')}
-              className="py-1.5 px-2.5 text-xs font-semibold rounded-xl bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-600 hover:border-indigo-400 transition-colors flex items-center justify-center gap-1.5 shadow-sm"
-            >
-              <User className="w-3.5 h-3.5 text-purple-500" />
-              Student 2
-            </button>
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => handleDemo('faculty')}
-              className="py-1.5 px-2.5 text-xs font-semibold rounded-xl bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-600 hover:border-indigo-400 transition-colors flex items-center justify-center gap-1.5 shadow-sm"
-            >
-              <GraduationCap className="w-3.5 h-3.5 text-teal-500" />
-              Faculty
-            </button>
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => handleDemo('admin')}
-              className="py-1.5 px-2.5 text-xs font-bold rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 hover:border-purple-400 transition-colors flex items-center justify-center gap-1.5 shadow-sm"
-            >
-              <Shield className="w-3.5 h-3.5 text-purple-600" />
-              Admin
-            </button>
-          </div>
         </div>
 
         {error && (
