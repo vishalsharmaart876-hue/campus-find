@@ -11,8 +11,9 @@ export const SocketProvider = ({ children }) => {
   const [incomingNotification, setIncomingNotification] = useState(null);
 
   useEffect(() => {
-    // Connect to same host via Vite proxy or direct
-    const newSocket = io(window.location.origin, {
+    // Connect to external server or same host via proxy
+    const socketEndpoint = import.meta.env.VITE_SOCKET_URL || (import.meta.env.VITE_API_BASE_URL ? import.meta.env.VITE_API_BASE_URL.replace('/api', '') : window.location.origin);
+    const newSocket = io(socketEndpoint, {
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 5,
       reconnectionDelay: 1000
