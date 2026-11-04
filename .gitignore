@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+server/node_modules/
+client/node_modules/
+ai-service/__pycache__/
+ai-service/venv/
+
+# Environment variables
+.env
+server/.env
+client/.env
+ai-service/.env
+
+# Build output
+client/dist/
+client/build/
+
+# Uploads (local)
+server/uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Misc
+*.tgz
+.cache/
+
+# Test/scratch files
+test-*.js
+scratch/

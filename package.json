@@ -1,0 +1,14 @@
+{
+  "name": "campusfind-monorepo",
+  "version": "1.0.0",
+  "description": "CampusFind - Complete College Lost and Found Platform",
+  "scripts": {
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client",
+    "server": "npm start --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.5"
+  }
+}
