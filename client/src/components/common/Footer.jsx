@@ -93,11 +93,7 @@ const Footer = () => {
             <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-400">
               <li className="flex items-center gap-1.5">
                 <Mail className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-                <span>security@campus.edu</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <Phone className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-                <span>Ext. 2024 / +91-9876543210</span>
+                <span>support@poornima.edu.in</span>
               </li>
               <li>
                 <Link to="/about" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
