@@ -253,3 +253,8 @@ The application automatically seeds realistic university demo accounts:
 
 ## 📄 License
 This project is licensed under the MIT License. Built for university communities worldwide.
+
+<!-- 
+cd c:\Users\Vishal\OneDrive\Desktop\portfolio\campus_lost_found\server
+npm run create-admin
+"this command  is for create admin in the project -->

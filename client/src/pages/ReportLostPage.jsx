@@ -557,15 +557,29 @@ const ReportLostPage = () => {
             <div className="space-y-2 pt-2">
               <button
                 type="button"
-                onClick={() => navigate(`/items/${createdItemData.item?._id || createdItemData.item}`)}
-                className="w-full py-3 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-md transition-colors"
+                onClick={() => {
+                  const targetId = createdItemData.item?._id || createdItemData.item?.id || createdItemData.item;
+                  if (targetId) {
+                    navigate(`/items/${targetId}`);
+                  } else {
+                    navigate('/browse');
+                  }
+                }}
+                className="w-full py-3 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                View Item Details →
+                <span>View Item Details →</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/browse')}
+                className="w-full py-2.5 text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 rounded-xl transition-colors cursor-pointer"
+              >
+                Browse All Items
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/my-reports')}
-                className="w-full py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-colors"
+                className="w-full py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-colors cursor-pointer"
               >
                 Go to My Reports
               </button>
