@@ -9,6 +9,14 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [incomingMessage, setIncomingMessage] = useState(null);
   const [incomingNotification, setIncomingNotification] = useState(null);
+  const [campusBroadcastItem, setCampusBroadcastItem] = useState(null);
+
+  // Request browser notification permission once
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().catch(() => {});
+    }
+  }, []);
 
   useEffect(() => {
     // Connect to external server or same host via proxy
@@ -34,6 +42,27 @@ export const SocketProvider = ({ children }) => {
 
     newSocket.on('new_notification', (data) => {
       setIncomingNotification(data);
+    });
+
+    newSocket.on('campus_broadcast_item', (data) => {
+      setCampusBroadcastItem(data);
+
+      // Trigger Native Mobile / Desktop Push Notification
+      try {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          const notif = new Notification(data.toastTitle || 'CampusFind Alert', {
+            body: data.toastMessage || `${data.title} reported at ${data.locationName}`,
+            icon: '/favicon.svg',
+            tag: `item-${data.id}`
+          });
+          notif.onclick = () => {
+            window.focus();
+            window.location.href = `/items/${data.id}`;
+          };
+        }
+      } catch (err) {
+        // ignore notification error on mobile browsers without service worker
+      }
     });
 
     return () => {
@@ -72,6 +101,8 @@ export const SocketProvider = ({ children }) => {
         socket,
         incomingMessage,
         incomingNotification,
+        campusBroadcastItem,
+        clearBroadcastItem: () => setCampusBroadcastItem(null),
         joinConversation,
         leaveConversation,
         sendChatMessage

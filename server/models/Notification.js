@@ -29,6 +29,7 @@ const notificationSchema = new mongoose.Schema(
         'found_request_accepted',
         'found_request_rejected',
         'handover_confirmed',
+        'new_campus_item',
         'system_alert'
       ],
       default: 'system_alert'

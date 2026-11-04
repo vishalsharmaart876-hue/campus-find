@@ -8,6 +8,7 @@ import { SocketProvider } from './context/SocketContext';
 // Common Components
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
+import CampusLiveToast from './components/common/CampusLiveToast';
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -92,6 +93,7 @@ function App() {
             <BrowserRouter>
               <div className="flex flex-col min-h-screen">
                 <Navbar />
+                <CampusLiveToast />
                 <main className="flex-1">
                   <Routes>
                     {/* Public Pages */}

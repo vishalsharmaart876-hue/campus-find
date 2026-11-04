@@ -94,6 +94,17 @@ exports.createLostItem = async (req, res) => {
     // Update user stats
     await User.findByIdAndUpdate(req.user.id, { $inc: { itemsReportedCount: 1 } });
 
+    // Broadcast new lost item to all students & campus members in real-time
+    try {
+      await notificationService.notifyCampusNewItem({
+        item,
+        reportedByUser: req.user,
+        io: req.io
+      });
+    } catch (broadcastErr) {
+      console.warn('Campus broadcast error:', broadcastErr.message);
+    }
+
     // AI visual & category matching against active found items
     let matches = [];
     try {
@@ -212,6 +223,17 @@ exports.createFoundItem = async (req, res) => {
     });
 
     await User.findByIdAndUpdate(req.user.id, { $inc: { itemsReportedCount: 1 } });
+
+    // Broadcast new found item to all students & campus members in real-time
+    try {
+      await notificationService.notifyCampusNewItem({
+        item,
+        reportedByUser: req.user,
+        io: req.io
+      });
+    } catch (broadcastErr) {
+      console.warn('Campus found broadcast error:', broadcastErr.message);
+    }
 
     // Match against active lost items
     let matches = [];

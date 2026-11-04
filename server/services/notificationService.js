@@ -410,6 +410,61 @@ class NotificationService {
   }
 
   /**
+   * Broadcast a newly reported Lost or Found item to all campus members
+   */
+  async notifyCampusNewItem({ item, reportedByUser, io }) {
+    try {
+      const isLost = item.type === 'lost';
+      const typeLabel = isLost ? 'Lost Item Alert' : 'Found Item Alert';
+      const icon = isLost ? '📢' : '🎁';
+      const title = `${icon} New ${typeLabel}: ${item.title}`;
+      const message = `${reportedByUser?.name || 'A campus member'} reported a ${item.type} item (${item.title}) at ${item.locationName} (${item.campusBuilding || 'Campus'}).`;
+
+      // 1. Broadcast via Socket.IO to all online connected users
+      if (io) {
+        io.emit('campus_broadcast_item', {
+          id: item._id,
+          title: item.title,
+          type: item.type,
+          category: item.category,
+          locationName: item.locationName,
+          campusBuilding: item.campusBuilding,
+          images: item.images || [],
+          complaintId: item.complaintId || item.itemCode,
+          reportedByName: reportedByUser?.name || 'Campus Member',
+          createdAt: item.createdAt || new Date(),
+          toastTitle: title,
+          toastMessage: message
+        });
+      }
+
+      // 2. Persist notification in database for active students/faculty (up to 50 recent active users to avoid server overload)
+      const recentUsers = await User.find({
+        _id: { $ne: reportedByUser?._id || reportedByUser?.id },
+        isBanned: false
+      })
+        .sort({ lastLoginAt: -1 })
+        .limit(50)
+        .select('_id');
+
+      if (recentUsers && recentUsers.length > 0) {
+        const notifDocs = recentUsers.map((u) => ({
+          recipient: u._id,
+          title,
+          message,
+          type: 'new_campus_item',
+          relatedItem: item._id,
+          isRead: false
+        }));
+
+        await Notification.insertMany(notifDocs);
+      }
+    } catch (err) {
+      console.warn('[NotificationService] Campus item broadcast error:', err.message);
+    }
+  }
+
+  /**
    * Get recent dispatch log for debugging & demo inspection
    */
   getDispatchLog() {
