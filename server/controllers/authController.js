@@ -40,12 +40,12 @@ exports.checkEmailAvailability = async (req, res) => {
       });
     }
 
-    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
-    if (!emailRegex.test(email)) {
+    const poornimaEmailRegex = /^[a-zA-Z0-9._%+-]+@poornima\.edu\.in$/;
+    if (!poornimaEmailRegex.test(email)) {
       return res.status(400).json({
         success: false,
         available: false,
-        message: 'Please provide a valid email format (e.g. yourname@campus.edu)'
+        message: 'Only official college email IDs ending with @poornima.edu.in are allowed.'
       });
     }
 
@@ -91,9 +91,12 @@ exports.signup = async (req, res) => {
     }
 
     const cleanEmail = email.toString().toLowerCase().trim();
-    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
-    if (!emailRegex.test(cleanEmail)) {
-      return res.status(400).json({ success: false, message: 'Please provide a valid college email address' });
+    const poornimaEmailRegex = /^[a-zA-Z0-9._%+-]+@poornima\.edu\.in$/;
+    if (!poornimaEmailRegex.test(cleanEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Registration is restricted to college students & faculty. Please use your @poornima.edu.in email ID.'
+      });
     }
 
     // Explicit Duplicate Email Check
@@ -201,8 +204,16 @@ exports.login = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please provide email and password' });
     }
 
+    const cleanEmail = email.toString().toLowerCase().trim();
+    if (!cleanEmail.endsWith('@poornima.edu.in')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid email domain. Only official college emails (@poornima.edu.in) can sign in.'
+      });
+    }
+
     const { ip, userAgent } = getClientMeta(req);
-    const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
+    const user = await User.findOne({ email: cleanEmail }).select('+password');
     if (!user) {
       return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
@@ -375,7 +386,16 @@ exports.updateProfile = async (req, res) => {
 exports.forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email: email ? email.toLowerCase() : '' });
+    const cleanEmail = email ? email.toString().toLowerCase().trim() : '';
+
+    if (!cleanEmail.endsWith('@poornima.edu.in')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password reset is only available for @poornima.edu.in accounts.'
+      });
+    }
+
+    const user = await User.findOne({ email: cleanEmail });
 
     if (!user) {
       return res.status(404).json({ success: false, message: 'No account registered with this email' });

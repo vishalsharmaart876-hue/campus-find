@@ -18,7 +18,7 @@ const seedInitialData = async () => {
     // 1. Create Users
     const adminUser = await User.create({
       name: 'Dr. Rajesh Verma',
-      email: 'admin@campus.edu',
+      email: 'admin@poornima.edu.in',
       password: 'Admin@123',
       role: 'admin',
       department: 'Campus Security & Administration',
@@ -31,7 +31,7 @@ const seedInitialData = async () => {
 
     const student1 = await User.create({
       name: 'Aravind Sharma',
-      email: 'aravind@campus.edu',
+      email: 'aravind@poornima.edu.in',
       password: 'Student@123',
       role: 'student',
       department: 'Computer Science & Engineering',
@@ -46,7 +46,7 @@ const seedInitialData = async () => {
 
     const student2 = await User.create({
       name: 'Priya Patel',
-      email: 'priya@campus.edu',
+      email: 'priya@poornima.edu.in',
       password: 'Student@123',
       role: 'student',
       department: 'Electronics & Communication',
@@ -61,7 +61,7 @@ const seedInitialData = async () => {
 
     const facultyUser = await User.create({
       name: 'Prof. Sunita Rao',
-      email: 'prof.sharma@campus.edu',
+      email: 'prof.sharma@poornima.edu.in',
       password: 'Faculty@123',
       role: 'faculty',
       department: 'Department of Mechanical Engineering',
@@ -136,10 +136,10 @@ const seedInitialData = async () => {
     if (process.env.SEED_SAMPLE_ITEMS === 'false') {
       console.log('[Seed] SEED_SAMPLE_ITEMS=false: Skipping demo items, claims, and notifications for clean start.');
       console.log('[Seed] Accounts ready:');
-      console.log('       Admin: admin@campus.edu / Admin@123');
-      console.log('       Student: aravind@campus.edu / Student@123');
-      console.log('       Student 2: priya@campus.edu / Student@123');
-      console.log('       Faculty: prof.sharma@campus.edu / Faculty@123');
+      console.log('       Admin: admin@poornima.edu.in / Admin@123');
+      console.log('       Student: aravind@poornima.edu.in / Student@123');
+      console.log('       Student 2: priya@poornima.edu.in / Student@123');
+      console.log('       Faculty: prof.sharma@poornima.edu.in / Faculty@123');
       return;
     }
 
@@ -322,10 +322,10 @@ const seedInitialData = async () => {
 
     console.log('[Seed] Realistic campus data seeded successfully!');
     console.log('[Seed] Accounts ready:');
-    console.log('       Admin: admin@campus.edu / Admin@123');
-    console.log('       Student: aravind@campus.edu / Student@123');
-    console.log('       Student 2: priya@campus.edu / Student@123');
-    console.log('       Faculty: prof.sharma@campus.edu / Faculty@123');
+    console.log('       Admin: admin@poornima.edu.in / Admin@123');
+    console.log('       Student: aravind@poornima.edu.in / Student@123');
+    console.log('       Student 2: priya@poornima.edu.in / Student@123');
+    console.log('       Faculty: prof.sharma@poornima.edu.in / Faculty@123');
   } catch (err) {
     console.error('[Seed] Error seeding data:', err);
   }

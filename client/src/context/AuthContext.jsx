@@ -105,17 +105,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const demoLogin = async (role = 'student', rememberMe = true) => {
-    let email = 'aravind@campus.edu';
+    let email = 'aravind@poornima.edu.in';
     let password = 'Student@123';
 
     if (role === 'admin') {
-      email = 'admin@campus.edu';
+      email = 'admin@poornima.edu.in';
       password = 'Admin@123';
     } else if (role === 'faculty') {
-      email = 'prof.sharma@campus.edu';
+      email = 'prof.sharma@poornima.edu.in';
       password = 'Faculty@123';
     } else if (role === 'student2') {
-      email = 'priya@campus.edu';
+      email = 'priya@poornima.edu.in';
       password = 'Student@123';
     }
 

@@ -56,12 +56,27 @@ const SignupPage = () => {
     'School of Humanities & Law'
   ];
 
-  // Debounced real-time duplicate email check
+  // Debounced real-time duplicate email check & poornima domain validation
   useEffect(() => {
-    const rawEmail = formData.email.trim();
-    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
+    const rawEmail = formData.email.trim().toLowerCase();
+    const poornimaEmailRegex = /^[a-zA-Z0-9._%+-]+@poornima\.edu\.in$/;
 
-    if (!rawEmail || !emailRegex.test(rawEmail)) {
+    if (!rawEmail) {
+      setEmailStatus({ checking: false, available: null, message: '', duplicate: false });
+      return;
+    }
+
+    if (!rawEmail.endsWith('@poornima.edu.in')) {
+      setEmailStatus({
+        checking: false,
+        available: false,
+        duplicate: false,
+        message: 'Only college emails ending with @poornima.edu.in are allowed.'
+      });
+      return;
+    }
+
+    if (!poornimaEmailRegex.test(rawEmail)) {
       setEmailStatus({ checking: false, available: null, message: '', duplicate: false });
       return;
     }
@@ -84,7 +99,7 @@ const SignupPage = () => {
           checking: false,
           available: null,
           duplicate: false,
-          message: ''
+          message: err.response?.data?.message || ''
         });
       }
     }, 400);
@@ -123,6 +138,12 @@ const SignupPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const cleanEmail = formData.email.trim().toLowerCase();
+    if (!cleanEmail.endsWith('@poornima.edu.in')) {
+      setError('Registration is restricted to Poornima University / Institute. Please use your @poornima.edu.in email ID.');
+      return;
+    }
 
     if (emailStatus.duplicate) {
       setError('This college email is already registered. Please sign in or use another email.');
@@ -244,11 +265,11 @@ const SignupPage = () => {
             </div>
           </div>
 
-          {/* College Email with Real-time Duplicate Check */}
+          {/* College Email with Real-time Duplicate & Domain Check */}
           <div className="space-y-1">
             <div className="flex items-center justify-between">
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                College Email Address
+                Poornima College Email Address <span className="text-indigo-600 dark:text-indigo-400 font-bold">(@poornima.edu.in)</span>
               </label>
               {emailStatus.checking && (
                 <span className="text-[10px] text-indigo-600 dark:text-indigo-400 flex items-center gap-1 font-medium">
@@ -265,9 +286,9 @@ const SignupPage = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="e.g. yourname@campus.edu"
+                placeholder="e.g. 2024bcs042@poornima.edu.in"
                 className={`w-full pl-9 pr-9 py-2.5 rounded-xl border bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 ${
-                  emailStatus.duplicate
+                  emailStatus.duplicate || (formData.email && !formData.email.endsWith('@poornima.edu.in'))
                     ? 'border-rose-400 focus:ring-rose-400'
                     : emailStatus.available
                     ? 'border-emerald-400 focus:ring-emerald-400'
@@ -280,11 +301,18 @@ const SignupPage = () => {
                 {!emailStatus.checking && emailStatus.available === true && (
                   <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                 )}
-                {!emailStatus.checking && emailStatus.duplicate && (
+                {!emailStatus.checking && (emailStatus.duplicate || (formData.email && !formData.email.endsWith('@poornima.edu.in'))) && (
                   <AlertCircle className="w-4 h-4 text-rose-500" />
                 )}
               </div>
             </div>
+
+            {/* Invalid Domain Warning */}
+            {formData.email && !formData.email.endsWith('@poornima.edu.in') && (
+              <p className="text-[11px] text-rose-600 dark:text-rose-400 font-medium px-1">
+                ⚠️ Email must end with <strong className="underline">@poornima.edu.in</strong>
+              </p>
+            )}
 
             {/* Duplicate Email Alert Banner or Success Badge */}
             {emailStatus.duplicate && (
@@ -304,7 +332,7 @@ const SignupPage = () => {
             {emailStatus.available === true && (
               <div className="flex items-center gap-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold px-1">
                 <Check className="w-3.5 h-3.5" />
-                Email address is available for registration
+                Valid Poornima email & available for registration
               </div>
             )}
           </div>

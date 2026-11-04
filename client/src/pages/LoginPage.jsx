@@ -26,11 +26,17 @@ const LoginPage = () => {
       return;
     }
 
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail.endsWith('@poornima.edu.in')) {
+      setError('Only official college email IDs ending with @poornima.edu.in can sign in.');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
-      await login(email, password, rememberMe);
+      await login(cleanEmail, password, rememberMe);
       navigate(from, { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
@@ -125,7 +131,7 @@ const LoginPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-              College Email Address
+              Poornima College Email <span className="text-indigo-600 dark:text-indigo-400 font-bold">(@poornima.edu.in)</span>
             </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -134,10 +140,15 @@ const LoginPage = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="e.g. yourname@campus.edu"
+                placeholder="e.g. 2024bcs042@poornima.edu.in"
                 className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
+            {email && !email.trim().toLowerCase().endsWith('@poornima.edu.in') && (
+              <p className="text-[11px] text-rose-500 font-medium">
+                ⚠️ Email must end with @poornima.edu.in
+              </p>
+            )}
           </div>
 
           <div className="space-y-1">
